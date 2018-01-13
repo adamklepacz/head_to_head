@@ -2,46 +2,62 @@ import * as React from 'react';
 import NavBar from './components/NavBar';
 import Home from './components/Home';
 import Login from './components/Login';
-import HeadToHeadDetails from './components/HeadToHeadDetails';
 import All from './components/All';
 import Admin from './components/admin/Admin';
+import { Route, Switch } from 'react-router-dom';
+import ViewStore from './stores/ViewStore';
 
-class App extends React.Component<any, any> {
 
-    constructor(props){
-        super(props);
+interface AppProps {
+  viewStore: ViewStore
+};
 
-    }
-    render(){
-        return (
-            <div>
-                
-                {/* NavBar - do I need to include the ending tag? :) */}
-                <NavBar />
+interface AppState {
 
-                <div className="container-fluid">
-                    <div className="row">
-                        <div className="container main-content">
-                            <div className="row">
+};
 
-                                {/* Main content - start */}
-                                <div className={`col-sm-12`} >
-                                    <Home />
-                                    <Login />
-                                    <HeadToHeadDetails />
-                                    <All />
-                                    <Admin />
-                                </div>
-                                {/* Main content - end */}
+class App extends React.Component<AppProps, AppState> {
+ 
+  constructor(props){
+  super(props);
+  }
+  render(){
+    const { viewStore } = this.props;
+    console.log(viewStore);
+    return (
+      <div>
+      
+      {/* NavBar - do I need to include the ending tag? :) */}
+      <NavBar />
 
-                            </div>
-                        </div>
-                    </div>
-                </div>
+      <div className="container-fluid">
+        <div className="row">
+        <div className="container main-content">
+          <div className="row">
 
-            </div>
-        )
-    }
+          {/* Main content - start */}
+          <div className={`col-sm-12`} >
+            <Switch>
+            <Route exact path="/" component={ Home }/> 
+            {/* <Route path="/login" component={ Login } /> */}
+            <Route 
+              path="/login" 
+              render={routeProps => <Login {...routeProps} vievStore={viewStore}/>} 
+            />
+            <Route path="/all" component={ All } />
+            <Route path="/admin" component={ Admin } />
+            </Switch>
+          </div>
+          {/* Main content - end */}
+
+          </div>
+        </div>
+        </div>
+      </div>
+
+      </div>
+    )
+  }
 }
 
 export default App;

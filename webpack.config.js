@@ -54,12 +54,12 @@ module.exports = (env) => {
         },
         module: {
             rules: [
-                {
-                    enforce: "pre",
-                    test: /\.tsx?$/,
-                    exclude: /node_modules/,
-                    loader: "eslint-loader"
-                },
+                // {
+                //     enforce: "pre",
+                //     test: /\.tsx?$/,
+                //     exclude: /node_modules/,
+                //     loader: "eslint-loader"
+                // },
                 // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
                 {   
                     test: /\.tsx?$/, 
@@ -102,7 +102,8 @@ module.exports = (env) => {
         devServer: {
             contentBase: path.join(__dirname, "dist"),
             stats: "errors-only",
-            hot: true
+            hot: true,
+            historyApiFallback: true
         },
         plugins: (function () {
             const plugins = [];

@@ -9,7 +9,7 @@
     "prod": "npm run clean && webpack -p --env.production",
     "eslint": "eslint --ext .tsx,.ts src/js/** src/index.tsx --fix"
   },
-  "author": "Petr Tichy",
+  "author": "Adam Klepacz",
   "license": "ISC",
   "devDependencies": {
     "awesome-typescript-loader": "3.2.2",
@@ -24,9 +24,12 @@
     "bootstrap-loader": "2.1.0",
     "bootstrap-sass": "3.3.7",
     "css-loader": "0.26.1",
-    "eslint": "4.3.0",
+    "eslint": "^4.3.0",
+    "eslint-config-airbnb": "^16.1.0",
     "eslint-loader": "1.9.0",
-    "eslint-plugin-react": "7.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.5.1",
     "exports-loader": "0.6.4",
     "extract-text-webpack-plugin": "2.1.0",
     "file-loader": "0.11.1",
@@ -42,6 +45,7 @@
     "source-map-loader": "0.2.1",
     "style-loader": "0.13.1",
     "typescript": "2.4.2",
+    "typescript-eslint-parser": "^11.0.0",
     "url-loader": "0.5.8",
     "webpack": "3.0.0",
     "webpack-dev-server": "2.5.1"
