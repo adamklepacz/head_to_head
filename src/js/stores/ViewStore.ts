@@ -1,8 +1,8 @@
 class ViewStore {
   authed: boolean = true;
-  isLoading: boolean = true;
+  isLoading: boolean = false;
   user: any = null;
-  errorMessae: string = "";
+  errorMessage: string = "";
 }
 
 export default ViewStore;
