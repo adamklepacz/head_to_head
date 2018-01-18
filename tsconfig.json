@@ -5,7 +5,8 @@
         "module": "commonjs",
         "target": "es5",
         "allowJs": true,
-        "jsx": "react"
+        "jsx": "react",
+        "experimentalDecorators": true
     },
     "include": [
         "./src/**/*"
