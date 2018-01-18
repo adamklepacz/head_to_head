@@ -37,7 +37,7 @@ class App extends React.Component<AppProps, AppState> {
       {
         isLoading ? <Loader /> : 
         <div>
-          <NavBar />
+          <NavBar viewStore={viewStore} />
 
           <div className="container-fluid">
             <div className="row">

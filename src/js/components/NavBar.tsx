@@ -1,7 +1,17 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
+import ViewStore from '../stores/ViewStore';
+import { observer } from 'mobx-react';
+import { logout } from '../utils/firebase';
 
-const NavBar = () => {
+interface NavBarProps {
+  viewStore: ViewStore;
+};
+
+
+const NavBar = observer((props: NavBarProps) => {
+  const { authed } = props.viewStore;
+
   return (
   <nav className="navbar navbar-inverse navbar-fixed-top">
     <div className="container">
@@ -21,10 +31,12 @@ const NavBar = () => {
       </ul>
       <ul className="nav navbar-nav navbar-right">
         <li>
-        <Link to="/login">Sign in</Link>
-        </li>
-        <li>
-        <Link to="/">Logout</Link>
+          {
+            !authed ? 
+              <Link to="/login">Sign in</Link> 
+              :
+              <Link to="/" onClick={() => {  logout() }}>Logout</Link>
+          }
         </li>
       </ul>
       </div>
@@ -32,6 +44,6 @@ const NavBar = () => {
     </div>
   </nav>
   )
-}
+})
 
 export default NavBar;
