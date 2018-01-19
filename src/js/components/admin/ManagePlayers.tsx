@@ -7,7 +7,7 @@ const ManagePlayers = () => {
         <div className="row">
             <h2>Manage Players</h2>
             <AddPlayerForm />
-            <div className="panel panel-default">
+            {/* <div className="panel panel-default">
                 <div className="panel-heading">
                     <h3 className="panel-title">Players</h3>
                 </div>
@@ -28,7 +28,7 @@ const ManagePlayers = () => {
                         </table>
                     </div>
                 </div>
-            </div>
+            </div> */}
         </div>
     );
 };

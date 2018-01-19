@@ -3,7 +3,7 @@ import { observable } from 'mobx';
 
 class ViewStore {
   authed: boolean = true;
-  isLoading: boolean = false;
+  isLoading: boolean = true;
   user: any = null;
   @observable  errorMessage: string = "";
 
