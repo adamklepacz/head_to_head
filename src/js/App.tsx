@@ -1,10 +1,6 @@
 import * as React from 'react';
-import NavBar from './components/NavBar';
-import Home from './components/Home';
-import Login from './components/Login';
-import All from './components/All';
+import {NavBar, Home, Login, All, Loader } from './components/index';
 import Admin from './components/admin/Admin';
-import Loader from './components/Loader';
 import { Route, Switch } from 'react-router-dom';
 import ViewStore from './stores/ViewStore';
 import DevTools from 'mobx-react-devtools';
@@ -37,7 +33,7 @@ class App extends React.Component<AppProps, AppState> {
       {
         isLoading ? <Loader /> : 
         <div>
-          <NavBar />
+          <NavBar viewStore={viewStore} />
 
           <div className="container-fluid">
             <div className="row">
