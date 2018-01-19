@@ -1,6 +1,6 @@
 import * as React from 'react';
-import AddHeadToHeadForm from './forms/AddHeadToHeadForm';
-import HeadToHeadRow from './forms/HeadToHeadRow'
+
+import { AddHeadToHeadForm, HeadToHeadRow } from './forms';
 
 const ManageHeadToHeads = () => {
     return (

@@ -1,6 +1,5 @@
 import * as React from 'react';
-import AddGameForm from './forms/AddGameForm';
-import GameRow from './forms/GameRow'
+import { AddGameForm, GameRow } from './forms';
 
 const ManageGames = () => {
     return (

@@ -7,7 +7,7 @@ class ViewStore {
   @observable user: any = null;
   @observable  errorMessage: string = "";
 
-  firebaseCheckAuth = () => {
+  @observable  firebaseCheckAuth = () => {
     firebaseAuth().onAuthStateChanged((user) => {
       if(user) {
         this.authed = true,

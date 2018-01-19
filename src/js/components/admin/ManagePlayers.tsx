@@ -1,6 +1,5 @@
 import * as React from 'react';
-import AddPlayerForm from './forms/AddPlayerForm';
-import PlayerRow from './forms/PlayerRow'
+import { AddPlayerForm, PlayerRow } from './forms';
 
 const ManagePlayers = () => {
     return (
