@@ -1,4 +1,4 @@
-import { firebaseAuth } from '../utils/firebase';
+import { firebaseAuth, playersRef } from '../utils/firebase';
 import { observable } from 'mobx';
 
 class ViewStore {
@@ -26,7 +26,9 @@ class ViewStore {
   }
 
   addPlayer = (playerName: string) => {
-    console.log(playerName)
+    // add data to firebase
+    const playerKey = playersRef.push().key;
+    playersRef.child(playerKey).set({"name" : playerName});
   }
 }
 
