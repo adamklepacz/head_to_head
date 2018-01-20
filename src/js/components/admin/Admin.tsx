@@ -7,11 +7,16 @@ import * as React from 'react';
 import { ManageGames, ManageHeadToHeads, ManagePlayers } from './';
 
 class Admin extends React.Component<any, any> {
+  constructor(props) {
+    super(props);
+  }
+
   render() {
+    const { viewStore } = this.props;
     return (
       <div className="col-sm-8">
         
-        <ManagePlayers />
+        <ManagePlayers/>
         {/* <ManageHeadToHeads />
         <ManageGames /> */}
         

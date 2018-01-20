@@ -5,7 +5,7 @@ const ManagePlayers = () => {
     return (
         <div className="row">
             <h2>Manage Players</h2>
-            <AddPlayerForm />
+            <AddPlayerForm/>
             {/* <div className="panel panel-default">
                 <div className="panel-heading">
                     <h3 className="panel-title">Players</h3>
