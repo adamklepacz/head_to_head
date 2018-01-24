@@ -1,49 +1,100 @@
 import * as React from 'react';
+import ViewStore from '../stores/ViewStore';
+import { login } from '../utils/firebase';
+import { observer } from 'mobx-react';
 
-class Login extends React.Component<any, any> {
-    render() {
-        return (
-            <div id="login-form" className="panel panel-info" >
-                <div className="panel-heading">
-                    <div className="panel-title">Sign In</div>
-                </div>     
+interface LoginProps {
+  viewStore: ViewStore,
+  history: any;
+};
 
-                <div className="panel-body" >
+interface LoginState {
 
-                    <form id="loginform" className="form" role="form">
+};
 
-                        <div className="col-sm-12">
-                            <div className="row form-group">
-                                <div id="login-alert" className="alert alert-danger">Invalid username/password</div>
-                            </div>
-                        </div>
+@observer
+class Login extends React.Component<LoginProps, LoginState> {
+  email: HTMLInputElement;
+  pw: HTMLInputElement;
 
-                        <div className="col-sm-12">
-                            <div className="form-group">
-                                <label htmlFor="email">Email</label>
-                                <input type="text" className="form-control" name="email" placeholder="Email"/>
-                            </div>
-                        </div>
-                            
-                        <div className="col-sm-12">
-                            <div className="form-group">
-                                <label htmlFor="pw">Password</label>
-                                <input type="password" className="form-control" name="pw" placeholder="Password"  />
-                            </div>
-                        </div>
-                                
-                        <div className="col-sm-12">
-                            <div className="form-group">
-                                <button type="submit" className="btn btn-primary btn-block">Login</button>
-                            </div>
-                        </div>
+  constructor(props) {
+    super(props);
 
-                    </form>     
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
 
-                </div>
-            </div> 
-        );
-    }
+  handleSubmit(e) {
+  e.preventDefault();
+  const { viewStore } = this.props; // destructure the state
+  
+  // Login to firebase
+  login(this.email.value, this.pw.value)
+    .then(()=> {
+      this.props.history.push('/all');
+      viewStore.firebaseCheckAuth();
+    })
+    .catch((err) => {
+      viewStore.logError(err.message);
+    });    
+  }
+
+  render() {
+  const { errorMessage } = this.props.viewStore;
+  return (
+    <div id="login-form" className="panel panel-info" >
+      <div className="panel-heading">
+        <div className="panel-title">Sign In</div>
+      </div>     
+
+      <div className="panel-body" >
+
+        <form id="loginform" className="form" role="form" onSubmit={(e) => this.handleSubmit(e)}>
+        {
+          errorMessage !== "" && <div className="col-sm-12">
+            <div className="row form-group">
+              <div id="login-alert" className="alert alert-danger">{errorMessage}</div>
+            </div>
+          </div>
+        }
+
+        <div className="col-sm-12">
+          <div className="form-group">
+          <label htmlFor="email">Email</label>
+          <input 
+            type="text" 
+            className="form-control" 
+            name="email" 
+            placeholder="Email"
+            ref={(input) => this.email = input}
+          />
+          </div>
+        </div>
+          
+        <div className="col-sm-12">
+          <div className="form-group">
+          <label htmlFor="pw">Password</label>
+          <input 
+            type="password" 
+            className="form-control" 
+            name="pw" 
+            placeholder="Password"  
+            ref={(input) => this.pw = input}
+          />
+          </div>
+        </div>
+          
+        <div className="col-sm-12">
+          <div className="form-group">
+          <button type="submit" className="btn btn-primary btn-block">Login</button>
+          </div>
+        </div>
+
+        </form>     
+
+      </div>
+    </div> 
+  );
+  }
 }
 
 export default Login;

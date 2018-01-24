@@ -1,7 +1,6 @@
-import { firebaseAuth, playersRef, headToHeadsRef } from '../utils/firebase';
+import { firebaseAuth, playersRef } from '../utils/firebase';
 import { observable } from 'mobx';
 import { Player } from '../models';
-import { HeadToHead } from '../models';
 
 class ViewStore {
   @observable authed: boolean = true;
@@ -9,8 +8,6 @@ class ViewStore {
   @observable user: any = null;
   @observable errorMessage: string = "";
   @observable players: Player[] = [];
-  @observable headToHeads: HeadToHead[] = [];
-
 
   constructor() {
     this.fetchPlayers();
@@ -48,7 +45,6 @@ class ViewStore {
     this.errorMessage = error;
   }
 
-  // CRUD - players
   addPlayer = (playerName: string) => {
     // add data to firebase
     const playerKey = playersRef.push().key;
@@ -67,20 +63,6 @@ class ViewStore {
   // removeAllPlayers = () => {
   //   playersRef.remove();
   // }
-
-  // CRUD - headToHeads
-  addHeadToHead = (title: string, playerA: string, playerB: string) => {
-    // add data to firebase
-    const headToHeadKey = headToHeadsRef.push().key;
-    headToHeadsRef.child(headToHeadKey).set({
-      "title": title,
-      "playerA": playerA,
-      "playerB": playerB,
-      "playerAWinCount": 0,
-      "drawsCount": 0,
-      "playerBWinCount": 0 
-    });
-  }
 }
 
 export default ViewStore;
