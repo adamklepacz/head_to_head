@@ -8,7 +8,7 @@ interface ManageGamesProps {
 }
 
 const ManageGames = (props: ManageGamesProps ) => {
-  const { games } = this.props.viewStore;
+  const { games } = props.viewStore;
 
   return (
     <div className="row">
