@@ -16,7 +16,7 @@ const ManageHeadToHeads = (props: ManageHeadToHeadsProps) => {
       <AddHeadToHeadForm /> 
       {
         // show headToHeads only when there is headToHead game in store
-        headToHeads.length > 1 &&
+        headToHeads.length > 0 &&
         <div className="panel panel-default">
           <div className="panel-heading">
             <h3 className="panel-title">Head To Heads</h3>
@@ -34,8 +34,12 @@ const ManageHeadToHeads = (props: ManageHeadToHeadsProps) => {
                   </tr>
                 </thead>
                 <tbody>
-                  <HeadToHeadRow /> 
-                  <tr><td colSpan={5}><p>Create your first head to head above.</p></td></tr>
+                  {
+                    headToHeads.length > 0 ? headToHeads.map((headToHead, index) => {
+                      const { key } = headToHead;
+                      return <HeadToHeadRow index={index} key={key} headToHead={headToHead}/>;
+                    }) : <tr><td colSpan={5}><p>Create your first head to head above.</p></td></tr>
+                  }
                 </tbody>
               </table>
             </div>

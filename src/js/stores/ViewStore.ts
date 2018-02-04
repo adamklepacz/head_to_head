@@ -1,6 +1,7 @@
 import { firebaseAuth, playersRef, headToHeadsRef } from '../utils/firebase';
 import { observable } from 'mobx';
-import { Player, HeadToHead } from '../models';
+import { Player, HeadToHead, Game } from '../models';
+import { log } from 'util';
 
 class ViewStore {
   @observable authed: boolean = true;
@@ -9,9 +10,12 @@ class ViewStore {
   @observable errorMessage: string = "";
   @observable players: Player[] = [];
   @observable headToHeads: HeadToHead[] = [];
+  @observable selectedHeadToHead: HeadToHead = null;
+  @observable games: Game[] = [];
 
   constructor() {
     this.fetchPlayers();
+    this.fetchHeadToHeads(); 
   }
 
   fetchPlayers() {
@@ -26,6 +30,25 @@ class ViewStore {
       });
 
       this.players = players;
+    }.bind(this));
+  }
+
+  fetchHeadToHeads() {
+    console.log('fetchuje headToHeads');
+    headToHeadsRef.on('value', function (snapshot) {
+      let headToHeads = [];
+
+      snapshot.forEach(function (childSnapshot) {
+        const headToHead = childSnapshot.val();
+        headToHead.key = childSnapshot.key;
+        headToHeads.push(headToHead);
+      });
+
+      this.headToHeads = headToHeads;
+
+      // select the first head to head in the array if there is no other head to heads selected
+      this.headToHeads.length > 0 && this.selectedHeadToHead === null && this.selectHeadToHead(this.headToHeads[0]);
+
     }.bind(this));
   }
 
@@ -55,7 +78,7 @@ class ViewStore {
   }
 
   updatePlayer = (playerKey: string, value: string) => {
-    playersRef.child(playerKey).set({"name": value});
+    playersRef.child(playerKey).update({"name": value});
   }
 
   removePlayer = (playerKey: string) => {
@@ -80,6 +103,23 @@ class ViewStore {
       "playerBWinCount": 0
     });
   }
+
+  updateHeadToHead = (key: string, name: string, value: string) => {
+    headToHeadsRef.child(key).update({ 
+      [name]: value 
+    });
+  }
+
+  removeHeadToHead = (key: string) => {
+    headToHeadsRef.child(key).remove();
+  }
+
+  selectHeadToHead = (headToHead: HeadToHead) => {
+    console.log(headToHead.title);
+    this.selectedHeadToHead = headToHead;
+    // this.fetchGames(headToHead);
+  }
+
 
 }
 

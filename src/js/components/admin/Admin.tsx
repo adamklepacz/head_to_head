@@ -12,7 +12,7 @@ interface AdminProps {
 class Admin extends React.Component<AdminProps, any> {
   render() {
     const { viewStore } = this.props;
-    const { players } = viewStore;
+    const { players, headToHeads } = viewStore;
     return (
       <div className="col-sm-8">
         
@@ -20,8 +20,9 @@ class Admin extends React.Component<AdminProps, any> {
         {
           players.length > 1 && <ManageHeadToHeads />
         }
-        {/* <ManageGames /> */}
-        
+        {
+          headToHeads.length > 0 && <ManageGames />
+        }
       </div>
     );
   }
