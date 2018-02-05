@@ -1,4 +1,4 @@
-import { firebaseAuth, playersRef, headToHeadsRef } from '../utils/firebase';
+import { firebaseAuth, playersRef, headToHeadsRef, gamesRef } from '../utils/firebase';
 import { observable } from 'mobx';
 import { Player, HeadToHead, Game } from '../models';
 import { log } from 'util';
@@ -16,7 +16,14 @@ class ViewStore {
   constructor() {
     this.fetchPlayers();
     this.fetchHeadToHeads(); 
+    // added by my - possilbe to remove
+   // this.clearSelectedHeadToHead();
   }
+
+  // // added by my - possilbe to remov
+  // clearSelectedHeadToHead() {
+  //   this.selectedHeadToHead = null;
+  // }
 
   fetchPlayers() {
     console.log('fetchuje playerow');
@@ -118,6 +125,45 @@ class ViewStore {
     console.log(headToHead.title);
     this.selectedHeadToHead = headToHead;
     // this.fetchGames(headToHead);
+  }
+
+  // CRUD - games
+  addGame = (homeTeamName: string, awayTeamName: string, homeTeamGoals: number, awayTeamGoals: number) => {
+
+    const { key, playerA, playerB } = this.selectedHeadToHead;
+    const winnerKey = this.getWinner(playerA, playerB, homeTeamGoals, awayTeamGoals);
+
+    const pA = this.players.length > 0 && this.players.filter(player => player.key === playerA);
+    const pB = this.players.length > 0 && this.players.filter(player => player.key === playerB);
+    
+    // add data to firebase
+    const gameKey = gamesRef.push().key;
+    gamesRef.child(gameKey).set({
+      //"headToHeadKey": key,
+      "homeTeamKey": playerA,
+      "awayTeamKey": playerB,
+      "homeTeamName": homeTeamName !== '' ? homeTeamName : pA[0].name,
+      "awayTeamName": awayTeamName !== '' ? awayTeamName : pB[0].name,
+      "homeTeamGoals": homeTeamGoals,
+      "awayTeamGoals": awayTeamGoals,
+      "date": Date.now(),
+      "winnerKey": winnerKey
+    });
+  }
+
+  getWinner = (playerA: string, playerB: string, homeTeamGoals: number, awayTeamGoals: number) => {
+    let winner;
+    if (homeTeamGoals > awayTeamGoals) {
+      winner = playerA;
+      console.log('Winner is:', playerA);
+    } else if (homeTeamGoals < awayTeamGoals) {
+      winner = playerB;
+      console.log('Winner is:', playerB);
+    } else if (homeTeamGoals === awayTeamGoals) {
+      winner = '';
+      console.log('It is draw'); 
+    }
+    return winner;
   }
 
 

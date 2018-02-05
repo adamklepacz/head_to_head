@@ -27,7 +27,18 @@ class AddGameForm extends React.Component<AddGameFormProps, AddGameFormState> {
       homeTeamGoals: 0,
       awayTeamGoals: 0
     };
+
+    // added by my - possilbe to remove
+    //this.checkIfDataExist();
   }
+
+  // added by my - possilbe to remove
+  // checkIfDataExist() {
+  //   const {viewStore}  = this.props;
+  //   if(viewStore.headToHeads.length < 0) {
+  //     viewStore.clearSelectedHeadToHead();
+  //   }
+  // }
 
   handleInputChange(e) {
     const { name, value } = e.target;
@@ -51,9 +62,9 @@ class AddGameForm extends React.Component<AddGameFormProps, AddGameFormState> {
   handleSubmit(e) {
     e.preventDefault();
     const { viewStore } = this.props;
-    const { headToHeadKey, homeTeamName, awayTeamName, homeTeamGoals, awayTeamGoals } = this.state;
+    const { homeTeamName, awayTeamName, homeTeamGoals, awayTeamGoals } = this.state;
 
-    console.log(headToHeadKey, homeTeamName, awayTeamName, homeTeamGoals, awayTeamGoals);
+    viewStore.addGame(homeTeamName, awayTeamName, homeTeamGoals, awayTeamGoals);
 
     // clear the form 
     this.setState({
