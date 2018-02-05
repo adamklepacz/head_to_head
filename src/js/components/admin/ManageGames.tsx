@@ -3,6 +3,7 @@ import { AddGameForm, GameRow } from './forms';
 import ViewStore from '../../stores/ViewStore';
 import { observer, inject } from 'mobx-react';
 
+
 interface ManageGamesProps {
   viewStore?: ViewStore
 }
@@ -33,9 +34,14 @@ const ManageGames = (props: ManageGamesProps ) => {
                     <th>Action</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <GameRow /> 
-                  <tr><td colSpan={6}><p>Create your first game above.</p></td></tr>
+                <tbody> 
+                {
+                  games.length > 0 ? games.map((game, index) => {
+                    return <GameRow game={game} index={index}/> 
+                    }) : <tr><td colSpan={6}><p>Create your first game above.</p></td></tr>
+                }
+                  
+                 
                 </tbody>
               </table>
             </div>

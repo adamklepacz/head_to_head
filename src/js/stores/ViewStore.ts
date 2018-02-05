@@ -59,6 +59,22 @@ class ViewStore {
     }.bind(this));
   }
 
+  fetchGames = (headToHead: HeadToHead) => {
+    // now read games from firebase, only games related to selected head to head
+    console.log('fetchuje gamesy');
+    gamesRef.orderByChild('headToHeadKey').equalTo(headToHead.key).on('value', function (snapshot) {
+      let games = [];
+
+      snapshot.forEach(function (childSnapshot) {
+        const game = childSnapshot.val();
+        game.key = childSnapshot.key;
+        games.push(game);
+      });
+
+      this.games = games;
+    }.bind(this));
+  }
+
   @observable firebaseCheckAuth = () => {
     firebaseAuth().onAuthStateChanged((user) => {
       if(user) {
@@ -124,7 +140,7 @@ class ViewStore {
   selectHeadToHead = (headToHead: HeadToHead) => {
     console.log(headToHead.title);
     this.selectedHeadToHead = headToHead;
-    // this.fetchGames(headToHead);
+    this.fetchGames(headToHead);
   }
 
   // CRUD - games
@@ -139,7 +155,7 @@ class ViewStore {
     // add data to firebase
     const gameKey = gamesRef.push().key;
     gamesRef.child(gameKey).set({
-      //"headToHeadKey": key,
+      "headToHeadKey": key,
       "homeTeamKey": playerA,
       "awayTeamKey": playerB,
       "homeTeamName": homeTeamName !== '' ? homeTeamName : pA[0].name,
@@ -166,7 +182,15 @@ class ViewStore {
     return winner;
   }
 
+  updateGame = (key: string, name: string, value: string) => {
+    gamesRef.child(key).update({
+      [name]: value
+    });
+  }
 
+  removeGame = (key: string) => {
+    gamesRef.child(key).remove();
+  }
 }
 
 export default ViewStore;
