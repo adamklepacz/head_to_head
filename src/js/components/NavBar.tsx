@@ -23,12 +23,16 @@ const NavBar = (props: NavBarProps) => {
         <span className="icon-bar"></span>
         <span className="icon-bar"></span>
       </button>
-      <Link to="/" className="navbar-brand">Head To Head</Link>
+      <Link to={`${authed ? '/all' : '/'}`} className="navbar-brand">Head To Head</Link>
       </div>
       <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul className="nav navbar-nav navbar-left">
-        <li><Link to="/admin">Admin</Link></li>
-      </ul>
+      {
+        authed && <ul className="nav navbar-nav navbar-left">
+          <li>
+            <Link to="/admin">Admin</Link>
+          </li>
+        </ul>
+      }
       <ul className="nav navbar-nav navbar-right">
         <li>
           {

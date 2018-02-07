@@ -1,37 +1,11 @@
 import * as React from 'react';
 import PlayerIcon from './PlayerIcon';
 import Games from './Games';
-import { HeadToHead } from '../models';
-import ViewStore from '../stores/ViewStore';
-import { observer, inject } from 'mobx-react';
 
-interface HeadToHeadDetailsProps {
-  viewStore?: ViewStore,
-  headToHead: HeadToHead,
-  history: any
-}
-
-interface HeadToHeadDetailsState {
-
-}
-
-@inject('viewStore')
-@observer
-class HeadToHeadDetails extends React.Component<HeadToHeadDetailsProps, HeadToHeadDetailsState> {
+class HeadToHeadDetails extends React.Component<any, any> {
   render() {
-    const { history, headToHead, viewStore } = this.props;
-    const { location } = history;
-    const isAll = location.pathname === '/all'; //check where we are 
-    const goToDetail = () => {
-      viewStore.selectHeadToHead(headToHead);
-      history.push(`/details/${headToHead.key}`);
-    }
-
     return (
-      //with-details
-      <div className={`hth-block ${!isAll ? 'with-details' : ''}`} onClick={() => {
-        isAll && goToDetail();
-      }}>
+      <div className={`hth-block with-details`}>
         <div className={`hth-block__item is-winning away-team`} >
           
           {/* Head To Head title - start */}

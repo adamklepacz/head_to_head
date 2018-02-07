@@ -5,12 +5,13 @@ import * as React from 'react';
 // import All from './components/All';
 import Admin from './components/admin/Admin';
 // import Loader from './components/Loader';
-import { NavBar, Home, Login, All, Loader } from './components';
+import { NavBar, Home, Login, All, Loader, HeadToHeadDetails } from './components';
 import { Route, Switch } from 'react-router-dom';
 import ViewStore from './stores/ViewStore';
 import DevTools from 'mobx-react-devtools';
 import { observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
+import { RequireAuth } from './components/routes';
 
 interface AppProps {
   viewStore: ViewStore
@@ -64,8 +65,9 @@ class App extends React.Component<AppProps, AppState> {
                           path="/login" 
                           render={routeProps => <Login {...routeProps} viewStore={viewStore}/>} 
                         />
-                        <Route path="/all" component={ All } />
-                        <Route path="/admin" component={ Admin } />
+                          <Route path="/all" component={RequireAuth(All)} />
+                          <Route path="/admin" component={RequireAuth(Admin)} />
+                          <Route path="/details/:id" component={HeadToHeadDetails} />
                       </Switch>
                     </div>
                     {/* Main content - end */}
