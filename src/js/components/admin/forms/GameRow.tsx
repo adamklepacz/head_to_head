@@ -15,7 +15,7 @@ interface GameRowState {
 
 @inject('viewStore')
 @observer
-class GameRow extends React.Component<GameRowProps, any> {
+class GameRow extends React.Component<GameRowProps, GameRowState> {
 
   handleInputChange(e) {
     const { name, value } = e.target;

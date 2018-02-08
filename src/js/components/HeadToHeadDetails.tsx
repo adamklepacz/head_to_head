@@ -20,12 +20,14 @@ interface HeadToHeadDetailsState {
 class HeadToHeadDetails extends React.Component<HeadToHeadDetailsProps, HeadToHeadDetailsState> {
   render() {
     const { history, headToHead, viewStore } = this.props;
+    const { selectedHeadToHead, getPlayerNames, games } = viewStore;
     const { location } = history;
     const isAll = location.pathname === '/all'; //check where we are 
     const goToDetail = () => {
-      viewStore.selectHeadToHead(headToHead);
+      viewStore.selectHeadToHead(headToHead)
       history.push(`/details/${headToHead.key}`);
     }
+    const { playerA, playerB, playerAWinCount, playerBWinCount, drawsCount, title} = headToHead || selectedHeadToHead;
 
     return (
       //with-details
@@ -37,11 +39,11 @@ class HeadToHeadDetails extends React.Component<HeadToHeadDetailsProps, HeadToHe
           {/* Head To Head title - start */}
           <span className="hth-block__item__title center-teams">
             <span className="center-teams__home">
-              <span><PlayerIcon /> Player A</span>
+              <span><PlayerIcon /> {getPlayerNames(playerA)}</span>
             </span> 
             <span className="center-teams__center">vs</span> 
             <span className="center-teams__away">
-              <span>Player B <PlayerIcon /></span>
+              <span>{getPlayerNames(playerB)}<PlayerIcon /></span>
             </span>
           </span>
           {/* Head To Head title - end */}
@@ -52,24 +54,20 @@ class HeadToHeadDetails extends React.Component<HeadToHeadDetailsProps, HeadToHe
             
             {/* Total score - start */}
             <span className="center-teams">
-              <span className="center-teams__home">5</span> 
-              <span className="center-teams__center">- 2 -</span> 
-              <span className="center-teams__away">7</span>
+              <span className="center-teams__home">{playerAWinCount}</span> 
+              <span className="center-teams__center">- {drawsCount} -</span> 
+              <span className="center-teams__away">{playerBWinCount}</span>
             </span>
             {/* Total score - end */}
 
             <span className="hth-block__details">
 
-              <span className="hth-block__item__label is-large">Fifa Challenge</span>
-              
-              {/* Game - start */}
-              <Games />
-              {/* Game - end */}
-
-              {/* No games found - start */}
-              <span className="hth-block__item__label"><em>No games found.</em></span>
-              {/* No games found - end */}
-
+              <span className="hth-block__item__label is-large">{title}</span>
+              {
+                games.length > 0 ?
+                  <Games /> :
+                  <span className="hth-block__item__label"><em>No games found.</em></span>
+              }
             </span>
 
           </span>

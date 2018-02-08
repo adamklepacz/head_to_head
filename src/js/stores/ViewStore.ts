@@ -25,6 +25,11 @@ class ViewStore {
   //   this.selectedHeadToHead = null;
   // }
 
+  getPlayerNames = (key: string):string => {
+    const player = this.players.length > 0 && this.players.filter(player => player.key === key);
+    return player[0].name;
+  }
+
   fetchPlayers() {
     console.log('fetchuje playerow');
     playersRef.on('value', function (snapshot) {
