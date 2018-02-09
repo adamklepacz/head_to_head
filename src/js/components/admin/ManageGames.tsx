@@ -36,7 +36,7 @@ const ManageGames = (props: ManageGamesProps ) => {
                 </thead>
                 <tbody> 
                 {
-                  games.length > 0 ? games.map((game, index) => {
+                  games.length > 0 ? games.reverse().map((game, index) => {
                     return <GameRow game={game} index={index}/> 
                     }) : <tr><td colSpan={6}><p>Create your first game above.</p></td></tr>
                 }

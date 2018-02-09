@@ -16,7 +16,7 @@ class ViewStore {
   constructor() {
     this.fetchPlayers();
     this.fetchHeadToHeads(); 
-    // added by my - possilbe to remove
+    // added by me - possilbe to remove
    // this.clearSelectedHeadToHead();
   }
 
@@ -64,10 +64,13 @@ class ViewStore {
     }.bind(this));
   }
 
-  fetchGames = (headToHead: HeadToHead) => {
+  fetchGames = (headToHead: HeadToHead, fetchAll?: boolean) => {
+ 
+    const limit = fetchAll ? 99999 : 10;
+
     // now read games from firebase, only games related to selected head to head
     console.log('fetchuje gamesy');
-    gamesRef.orderByChild('headToHeadKey').equalTo(headToHead.key).on('value', function (snapshot) {
+    gamesRef.orderByChild('headToHeadKey').equalTo(headToHead.key).limitToLast(limit).on('value', function (snapshot) {
       let games = [];
 
       snapshot.forEach(function (childSnapshot) {

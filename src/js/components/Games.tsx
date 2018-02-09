@@ -13,19 +13,34 @@ const Games = (props: GamesProps) => {
   return (
     <div>
       {
-        games.length > 0 && games.map(game => {
-          const { key, awayTeamName, homeTeamName, homeTeamGoals, awayTeamGoals, winnerKey, homeTeamKey, awayTeamKey} = game;
+        games.length > 0 && games.reverse().map(game => {
+          const { key, awayTeamName, homeTeamName, homeTeamGoals, awayTeamGoals } = game;
+
+          const homeTeamClass = classNames({
+            'center-teams__home': true,
+            'is-winner': homeTeamGoals > awayTeamGoals,
+          });
+          const centerClass = classNames({
+            'center-teams__center': true,
+            'is-winner-home': homeTeamGoals > awayTeamGoals,
+            'is-winner-away': awayTeamGoals > homeTeamGoals,
+            'is-draw': homeTeamGoals === awayTeamGoals,
+          });
+          const awayTeamClass = classNames({
+            'center-teams__away': true,
+            'is-winner': awayTeamGoals > homeTeamGoals
+          });
           return <span key={key} className="center-teams is-game">
 
             {/* available classes is-winner */}
-            <span className={`center-teams__home ${winnerKey === homeTeamKey ? 'is-winner' : ''}`}>{homeTeamName}</span>
+            <span className={homeTeamClass}>{homeTeamName}</span>
 
             {/* TODO ZASTAPIC warunkowe renderowanie klas -> classNames cons */ } 
             {/* available classes is-winner-home, is-draw, is-winner-away */}
-            <span className={`center-teams__center is-winner-home ${winnerKey === '' ? 'is-draw' : ''} ${winnerKey === homeTeamKey ? 'is-winner-home' : ''} ${winnerKey === awayTeamKey ? 'is-winner-away' : ''}`}>{homeTeamGoals}:{awayTeamGoals}</span>
+            <span className={centerClass}>{homeTeamGoals}:{awayTeamGoals}</span>
 
             {/* available classes is-winner */}
-            <span className={`center-teams__away ${winnerKey === awayTeamKey ? 'is-winner' : ''}`}>{awayTeamName}</span>
+            <span className={awayTeamClass}>{awayTeamName}</span>
 
           </span>
         })

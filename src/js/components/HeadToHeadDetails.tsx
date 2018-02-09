@@ -12,12 +12,33 @@ interface HeadToHeadDetailsProps {
 }
 
 interface HeadToHeadDetailsState {
-
+  showAllGames: boolean,
 }
 
 @inject('viewStore')
 @observer
 class HeadToHeadDetails extends React.Component<HeadToHeadDetailsProps, HeadToHeadDetailsState> {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      showAllGames: false,
+    }
+
+  }
+
+  handleShowAll = () => {
+    const { viewStore } = this.props;
+    const { selectedHeadToHead } = viewStore;
+
+    // fetch all the games
+    viewStore.fetchGames(selectedHeadToHead, true);
+
+    this.setState({
+      showAllGames: true,
+    });
+  }
+
   render() {
     const { history, headToHead, viewStore } = this.props;
     const { selectedHeadToHead, getPlayerNames, games } = viewStore;
@@ -28,6 +49,7 @@ class HeadToHeadDetails extends React.Component<HeadToHeadDetailsProps, HeadToHe
       history.push(`/details/${headToHead.key}`);
     }
     const { playerA, playerB, playerAWinCount, playerBWinCount, drawsCount, title} = headToHead || selectedHeadToHead;
+    const { showAllGames } = this.state;
 
     return (
       //with-details
@@ -72,8 +94,13 @@ class HeadToHeadDetails extends React.Component<HeadToHeadDetailsProps, HeadToHe
 
           </span>
           {/* Head To Head body - end */}
+          {
+            !showAllGames && games.length > 0 && games.length < 11 && <button type="button" className="btn btn-default btn-lg btn-block btn-show-all" onClick={() => {
+              this.handleShowAll();
+            }}>Show All</button>
+          }
           
-          <button type="button" className="btn btn-default btn-lg btn-block btn-show-all">Show All</button>
+          
 
         </div>
       </div>
