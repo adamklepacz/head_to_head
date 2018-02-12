@@ -16,6 +16,11 @@ interface AllState {
 @inject('viewStore')
 @observer
 class All extends React.Component<AllProps, AllState> {
+  componentDidMount() {
+    const { viewStore } = this.props;
+    viewStore.fetchData();
+  }
+
   render() {
     const { viewStore, history } = this.props;
     const { headToHeads } = viewStore;

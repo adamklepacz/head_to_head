@@ -14,10 +14,14 @@ class ViewStore {
   @observable games: Game[] = [];
 
   constructor() {
-    this.fetchPlayers();
-    this.fetchHeadToHeads(); 
     // added by me - possilbe to remove
    // this.clearSelectedHeadToHead();
+  }
+
+  fetchData = () => {
+    this.fetchPlayers();
+    this.fetchHeadToHeads();  
+    this.errorMessage = ''; 
   }
 
   // // added by my - possilbe to remov
@@ -61,6 +65,23 @@ class ViewStore {
       // select the first head to head in the array if there is no other head to heads selected
       this.headToHeads.length > 0 && this.selectedHeadToHead === null && this.selectHeadToHead(this.headToHeads[0]);
 
+    }.bind(this));
+  }
+
+  fetchHeadToHead(key: string) {
+    this.fetchPlayers();
+
+    headToHeadsRef.child(key).on('value', function (snapshot) {
+
+      if(!!snapshot.val()) {
+        const headToHead = snapshot.val();
+        headToHead.key = snapshot.key;
+
+        this.selectHeadToHead(headToHead); 
+      } else {
+        this.errorMessage = 'This Head To Head does not exist';
+      }
+  
     }.bind(this));
   }
 
@@ -159,7 +180,9 @@ class ViewStore {
 
     const pA = this.players.length > 0 && this.players.filter(player => player.key === playerA);
     const pB = this.players.length > 0 && this.players.filter(player => player.key === playerB);
-    
+
+    this.updateTotalScore(winnerKey, 'addGame');
+
     // add data to firebase
     const gameKey = gamesRef.push().key;
     gamesRef.child(gameKey).set({
@@ -197,7 +220,54 @@ class ViewStore {
   }
 
   removeGame = (key: string) => {
+    // get winner key from current removed game
+    const game = this.games.filter(game => game.key === key);
+    const { winnerKey } = game[0];
+
     gamesRef.child(key).remove();
+    this.updateTotalScore(winnerKey, 'removeGame');
+  }
+
+  updateTotalScore = (winnerKey: string, action: string) => {
+    // action = addGame || removeGame
+    const { key, playerAWinCount, drawsCount, playerBWinCount, playerA, playerB  } = this.selectedHeadToHead;
+
+    switch (action) {
+      case 'addGame':
+        if(winnerKey === playerA) {
+          headToHeadsRef.child(key).update({"playerAWinCount" : playerAWinCount + 1}, function() {
+            this.selectedHeadToHead.playerAWinCount = playerAWinCount + 1;
+          }.bind(this));
+        } else if(winnerKey === playerB) {
+          headToHeadsRef.child(key).update({ "playerBWinCount": playerBWinCount + 1 }, function() {
+            this.selectedHeadToHead.playerBWinCount = playerBWinCount + 1;
+          }.bind(this));
+        } else if(winnerKey === '') {
+          headToHeadsRef.child(key).update({ "drawsCount": drawsCount + 1 }, function() {
+            this.selectedHeadToHead.drawsCount = drawsCount + 1;
+          }.bind(this));
+        }
+        break;
+
+      case 'removeGame':
+        if (winnerKey === playerA) {
+          headToHeadsRef.child(key).update({ "playerAWinCount": playerAWinCount - 1 }, function () {
+            this.selectedHeadToHead.playerAWinCount = playerAWinCount - 1;
+          }.bind(this));
+        } else if (winnerKey === playerB) {
+          headToHeadsRef.child(key).update({ "playerBWinCount": playerBWinCount - 1 }, function () {
+            this.selectedHeadToHead.playerBWinCount = playerBWinCount - 1;
+          }.bind(this));
+        } else if (winnerKey === '') {
+          headToHeadsRef.child(key).update({ "drawsCount": drawsCount - 1 }, function () {
+            this.selectedHeadToHead.drawsCount = drawsCount - 1;
+          }.bind(this));
+        }
+        break;
+    
+      default:
+        break;
+    }
   }
 }
 
