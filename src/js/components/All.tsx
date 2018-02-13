@@ -2,6 +2,7 @@ import * as React from 'react';
 import ViewStore from '../stores/ViewStore';
 import { observer, inject } from 'mobx-react';
 import HeadToHeadDetails from './HeadToHeadDetails';
+import { Link } from 'react-router-dom';
 
 interface AllProps {
   viewStore?: ViewStore,
@@ -33,7 +34,9 @@ class All extends React.Component<AllProps, AllState> {
           }) :
           <div className="panel panel-info">
             <div className="panel-heading">No Head To Heads found</div>
-            <div className="panel-body">Create at least two <a href="#">Players</a> and one <a href="#">Head To Head</a>.</div>
+            <div className="panel-body">Create at least two
+              <Link className="custom_link_link" to="/admin"> Players </Link> and one <Link to="/admin"> Head to Head.</Link>
+            </div>
           </div>
 
         }
