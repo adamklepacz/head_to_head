@@ -1,7 +1,8 @@
 import { firebaseAuth, playersRef, headToHeadsRef, gamesRef } from '../utils/firebase';
-import { observable } from 'mobx';
+import { observable, computed } from 'mobx';
 import { Player, HeadToHead, Game } from '../models';
 import { log } from 'util';
+import { uniq } from 'lodash';
 
 class ViewStore {
   @observable authed: boolean = true;
@@ -163,13 +164,31 @@ class ViewStore {
   }
 
   removeHeadToHead = (key: string) => {
+    this.removeAllHeadToHeadGames(key);
+
     headToHeadsRef.child(key).remove();
+  }
+
+  removeAllHeadToHeadGames = (key: string) => {
+    const query = gamesRef.orderByChild('headToHeadKey').equalTo(key);
+    query.on('child_added', function(snapshot) {
+      // this will remove each game associated with remove HTH
+      snapshot.ref.remove();
+      return console.log('Game has been removed');
+    });
   }
 
   selectHeadToHead = (headToHead: HeadToHead) => {
     console.log(headToHead.title);
     this.selectedHeadToHead = headToHead;
     this.fetchGames(headToHead);
+  }
+
+  @computed get headToHeadPlayers() {
+    const keys = [];
+    this.headToHeads && this.headToHeads.length > 0 && this.headToHeads.map(headToHead => keys.push(headToHead.playerA, headToHead.playerB));
+
+    return uniq(keys);
   }
 
   // CRUD - games

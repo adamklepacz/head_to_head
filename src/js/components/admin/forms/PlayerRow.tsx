@@ -38,7 +38,8 @@ class PlayerRow extends React.Component<PlayerRowProps, PlayerRowState> {
   }
  
   render() {
-    const { index, player } = this.props;
+    const { index, player, viewStore } = this.props;
+    const { headToHeadPlayers } = viewStore;
     return (
       <tr>
         <th scope="row">{index + 1}</th>
@@ -54,10 +55,12 @@ class PlayerRow extends React.Component<PlayerRowProps, PlayerRowState> {
           />
         </td>
         <td>
-          <button 
-            className={`btn btn-default`}
-            onClick={() => this.handleDeleteClick(player.key)}
-          >X</button>
+          {
+            !headToHeadPlayers.includes(player.key) && <button
+              className={`btn btn-default`}
+              onClick={() => this.handleDeleteClick(player.key)}
+            >X</button>
+          }
         </td>
       </tr>
     );
